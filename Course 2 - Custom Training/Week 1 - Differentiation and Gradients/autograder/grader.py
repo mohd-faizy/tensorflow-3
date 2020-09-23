@@ -368,18 +368,7 @@ def Test_tf_gradient_tape():
     
     target = learner_mod.tf_gradient_tape
     
-    def solution(x):
-        with tf.GradientTape() as t:
-
-            t.watch(x) 
-
-            y =  3 * (x ** 3) - 2 * (x ** 2)  + x    
-
-            z = tf.reduce_sum(y) 
-
-        dz_dx = t.gradient(z, x)
-
-        return dz_dx
+    solution = solution_mod.tf_gradient_tape
     
     result1 = target(x)
     result2 = target(y)
