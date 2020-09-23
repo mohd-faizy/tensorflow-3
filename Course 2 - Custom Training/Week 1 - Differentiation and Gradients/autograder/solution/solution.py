@@ -28,7 +28,6 @@
 # + colab={} colab_type="code" id="jqev488WJ9-R"
 import tensorflow as tf
 import numpy as np
-import unit_tests
 
 # + [markdown] colab_type="text" id="sIIXMZboUw-P"
 # # Exercise on basic Tensor operations
