@@ -1,19 +1,21 @@
 import sys
 from disable_warnings import *
 from tools import print_stderr, send_feedback
-from grader import Test_tf_constant
+from grader import (Test_tf_constant, Test_tf_square,
+                    Test_tf_reshape, Test_tf_cast, Test_tf_multiply, 
+                    Test_tf_add, Test_tf_gradient_tape)
 
 
 def run_grader(part_id):
     
     graded_funcs = {
-        "1": Test_tf_constant, 
-        "2": None, 
-        "3": None,
-        "4": None,
-        "5": None,
-        "6": None,
-        "7": None
+        "2": Test_tf_constant, 
+        "3": Test_tf_square,
+        "4": Test_tf_reshape,
+        "5": Test_tf_cast,
+        "6": Test_tf_multiply,
+        "7": Test_tf_add,
+        "8": Test_tf_gradient_tape
     }
 
     g_func = graded_funcs.get(part_id)
