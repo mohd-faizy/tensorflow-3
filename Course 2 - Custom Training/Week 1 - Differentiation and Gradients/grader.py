@@ -24,7 +24,7 @@ def get_failed_cases(test_cases):
             failed_cases.append({"name": name, "expected": expected, "got": got})
     
     return failed_cases
-        
+
 
 def test_tf_constant():
 
@@ -65,16 +65,16 @@ def test_tf_constant():
                 "error_message": "output dtype is incorrect"
             },
             {
-                "name": "output_array_check_1",
+                "name": f'output_equality_check_1 -- hidden test output: {x}, learner output: {result1.numpy()}',
                 "got": np.array_equal(result1.numpy(), x),
                 "expected": True,
-                "error_message": "output array is incorrect"
+                "error_message": f'output of the hidden test is {result1.numpy()} while you got {x}'
             },
             {
                 "name": "output_array_check_2",
                 "got": np.array_equal(result2.numpy(), y),
                 "expected": True,
-                "error_message": "output array is incorrect"
+                "error_message": f'output of the hidden test is {result2.numpy()} while you got {y}'
             },
         ]
 
@@ -82,7 +82,7 @@ def test_tf_constant():
 
         return failed_cases, len(test_cases)
 
-    
+
 def test_tf_square():
 
     x = np.arange(41, 50)
@@ -139,7 +139,7 @@ def test_tf_square():
 
         return failed_cases, len(test_cases)
 
-    
+
 def test_tf_reshape():
 
     x = np.arange(41, 57)
@@ -198,7 +198,7 @@ def test_tf_reshape():
 
         return failed_cases, len(test_cases)
 
-    
+
 def test_tf_cast():
 
     x = np.arange(41, 50)
@@ -257,7 +257,7 @@ def test_tf_cast():
 
         return failed_cases, len(test_cases)
 
-    
+
 def test_tf_multiply():
 
     x1 = np.arange(41, 50)
@@ -316,7 +316,7 @@ def test_tf_multiply():
 
         return failed_cases, len(test_cases)
 
-    
+
 def test_tf_add():
 
     x1 = tf.constant(np.arange(41, 50))
@@ -375,7 +375,7 @@ def test_tf_add():
 
         return failed_cases, len(test_cases)
 
-    
+
 def test_tf_gradient_tape():
 
     x = tf.constant(4.0)
