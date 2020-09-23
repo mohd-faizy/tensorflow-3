@@ -3,8 +3,6 @@ import numpy as np
 from tensorflow.python.framework.ops import EagerTensor
 import learner_mod
 
-import importlib
-importlib.reload(learner_mod)
 
 def get_failed_cases(test_cases):
     
