@@ -317,7 +317,7 @@ def apply_gradient(optimizer, loss_object, model, x, y):
 # We are displaying a progress bar to indicate completion of training in each epoch. Here we use `tqdm` for displaying the progress bar. 
 
 # %% colab={} colab_type="code" id="3fHoh_hgz2PC"
-def train_data_for_one_epoch(train_dataset, optimizer, loss_object, model, train_acc_metric, train_f1score_metric):
+def train_data_for_one_epoch(train_dataset, optimizer, loss_object, model, train_acc_metric, train_f1score_metric, verbose=True):
     losses = []
 
     #Iterate through all batches of training data
@@ -340,7 +340,8 @@ def train_data_for_one_epoch(train_dataset, optimizer, loss_object, model, train
         ### END CODE HERE ###
 
         #Update progress
-        print("Training loss for step %s: %.4f" % (int(step), float(loss_value)))
+        if verbose:
+            print("Training loss for step %s: %.4f" % (int(step), float(loss_value)))
     
     return losses
 

@@ -241,8 +241,8 @@ def Test_train_data_for_one_epoch():
     train_dataset = tf.data.Dataset.from_tensor_slices((x, y))
     train_dataset = train_dataset.batch(32)
     
-    result = learner_mod.train_data_for_one_epoch(train_dataset, optimizer, loss_object, model, learner_train_acc_metric, learner_train_f1score_metric)
-    expected = solution_mod.train_data_for_one_epoch(train_dataset, optimizer, loss_object, solution_model, solution_train_acc_metric, solution_train_f1score_metric)   
+    result = learner_mod.train_data_for_one_epoch(train_dataset, optimizer, loss_object, model, learner_train_acc_metric, learner_train_f1score_metric, verbose=False)
+    expected = solution_mod.train_data_for_one_epoch(train_dataset, optimizer, loss_object, solution_model, solution_train_acc_metric, solution_train_f1score_metric, verbose=False)   
     
     if (type(result) != list):
         failed_cases = [{"name": "logits_type_check", 
