@@ -9,13 +9,13 @@ from grader import (Test_tf_constant, Test_tf_square,
 def run_grader(part_id):
     
     graded_funcs = {
-        "2": Test_tf_constant, 
-        "3": Test_tf_square,
-        "4": Test_tf_reshape,
-        "5": Test_tf_cast,
-        "6": Test_tf_multiply,
-        "7": Test_tf_add,
-        "8": Test_tf_gradient_tape
+        "r9hUX": Test_tf_constant, 
+        "kWeLo": Test_tf_square,
+        "E1weD": Test_tf_reshape,
+        "AuDvh": Test_tf_cast,
+        "NI9Co": Test_tf_multiply,
+        "Yz2KA": Test_tf_add,
+        "4uBzv": Test_tf_gradient_tape
     }
 
     g_func = graded_funcs.get(part_id)

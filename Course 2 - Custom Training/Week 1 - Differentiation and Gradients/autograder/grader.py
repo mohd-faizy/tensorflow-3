@@ -4,7 +4,7 @@ from tensorflow.python.framework.ops import EagerTensor
 import compiled
 import learner_mod
 import solution_mod
-from tools import send_feedback, table_testing_assert
+from tools import send_feedback
 
 def get_failed_cases(test_cases):
     
