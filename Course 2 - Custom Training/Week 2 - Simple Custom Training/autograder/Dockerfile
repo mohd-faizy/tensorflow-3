@@ -16,6 +16,11 @@ COPY tools.py /grader/tools.py
 COPY compiled.py /grader/compiled.py
 COPY solution/* /grader/solution/
 
+COPY expected_weights.pkl /grader/
+COPY model_weights.pkl /grader/
+COPY train_batch.pkl /grader/
+COPY train_dataset.pkl /grader/
+
 RUN chmod a+rwx -R /grader/
 
 WORKDIR /grader/

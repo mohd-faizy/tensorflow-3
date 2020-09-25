@@ -9,9 +9,9 @@ from grader import (Test_F1ScoreResult, Test_apply_gradients,
 def run_grader(part_id):
     
     graded_funcs = {
-        "2": Test_F1ScoreResult, 
-        "3": Test_apply_gradients,
-        "4": Test_train_data_for_one_epoch
+        "mylyu": Test_F1ScoreResult, 
+        "YQutN": Test_apply_gradients,
+        "8dNmL": Test_train_data_for_one_epoch
     }
 
     g_func = graded_funcs.get(part_id)
