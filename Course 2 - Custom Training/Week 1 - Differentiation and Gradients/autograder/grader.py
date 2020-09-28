@@ -32,7 +32,7 @@ def get_failed_cases(test_cases):
     return failed_cases
 
 
-def test_tf_constant():
+def Test_tf_constant():
 
     x = np.arange(41, 50)
     y = np.arange(71, 80)
@@ -89,7 +89,7 @@ def test_tf_constant():
         return failed_cases, len(test_cases)
 
 
-def test_tf_square():
+def Test_tf_square():
 
     x = np.arange(41, 50)
     y = np.arange(71, 80)
@@ -146,7 +146,7 @@ def test_tf_square():
         return failed_cases, len(test_cases)
 
 
-def test_tf_reshape():
+def Test_tf_reshape():
 
     x = np.arange(41, 57)
     y = np.arange(71, 87)
@@ -205,7 +205,7 @@ def test_tf_reshape():
         return failed_cases, len(test_cases)
 
 
-def test_tf_cast():
+def Test_tf_cast():
 
     x = np.arange(41, 50)
     y = np.arange(71, 80)
@@ -264,7 +264,7 @@ def test_tf_cast():
         return failed_cases, len(test_cases)
 
 
-def test_tf_multiply():
+def Test_tf_multiply():
 
     x1 = np.arange(41, 50)
     y1 = np.arange(71, 80)
@@ -323,7 +323,7 @@ def test_tf_multiply():
         return failed_cases, len(test_cases)
 
 
-def test_tf_add():
+def Test_tf_add():
 
     x1 = tf.constant(np.arange(41, 50))
     y1 = tf.constant(np.arange(71, 80))
@@ -382,7 +382,7 @@ def test_tf_add():
         return failed_cases, len(test_cases)
 
 
-def test_tf_gradient_tape():
+def Test_tf_gradient_tape():
 
     x = tf.constant(4.0)
     y = tf.constant(8.0)
