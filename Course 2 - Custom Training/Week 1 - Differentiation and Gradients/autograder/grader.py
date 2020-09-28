@@ -14,16 +14,26 @@ def get_failed_cases(test_cases):
         name = test_case.get("name")
         got = test_case.get("got")
         expected = test_case.get("expected")
-        if None in (name, got, expected):
-            raise Exception("malformed test case")
+
         try:
-            assert got == expected
+            if(type(got) == np.ndarray):
+                assert np.allclose(got, expected)
+            
+            elif(type(got) == list):
+                for a, b in zip(got, expected):
+                    if(np.allclose(a,b) == False):
+                        raise
+            else:
+                assert got == expected
+            
         except:
             failed_cases.append({"name": name, "expected": expected, "got": got})
     
     return failed_cases
 
-def Test_tf_constant():
+
+def test_tf_constant():
+
     x = np.arange(41, 50)
     y = np.arange(71, 80)
     
@@ -61,15 +71,15 @@ def Test_tf_constant():
                 "error_message": "output dtype is incorrect"
             },
             {
-                "name": f'output_equality_check_1 -- hidden test output: {x}, learner output: {result1.numpy()}',
-                "got": np.array_equal(result1.numpy(), x),
-                "expected": True,
+                "name": "hidden_input_array_check_1",
+                "got": result1.numpy(),
+                "expected": x,
                 "error_message": f'output of the hidden test is {result1.numpy()} while you got {x}'
             },
             {
-                "name": "output_array_check_2",
-                "got": np.array_equal(result2.numpy(), y),
-                "expected": True,
+                "name": "hidden_input_array_check_2",
+                "got": result2.numpy(),
+                "expected": y,
                 "error_message": f'output of the hidden test is {result2.numpy()} while you got {y}'
             },
         ]
@@ -78,7 +88,9 @@ def Test_tf_constant():
 
         return failed_cases, len(test_cases)
 
-def Test_tf_square():
+
+def test_tf_square():
+
     x = np.arange(41, 50)
     y = np.arange(71, 80)
     
@@ -116,15 +128,15 @@ def Test_tf_square():
                 "error_message": "output dtype is incorrect"
             },
             {
-                "name": "output_check_1",
-                "got": np.array_equal(result1.numpy(), solution(x).numpy()),
-                "expected": True,
+                "name": "hidden_input_array_check_1",
+                "got": result1.numpy(),
+                "expected": solution(x).numpy(),
                 "error_message": "output array is incorrect"
             },
             {
-                "name": "output_check_2",
-                "got": np.array_equal(result2.numpy(), solution(y).numpy()),
-                "expected": True,
+                "name": "hidden_input_array_check_2",
+                "got": result2.numpy(),
+                "expected": solution(y).numpy(),
                 "error_message": "output array is incorrect"
             },
         ]
@@ -134,7 +146,8 @@ def Test_tf_square():
         return failed_cases, len(test_cases)
 
 
-def Test_tf_reshape():
+def test_tf_reshape():
+
     x = np.arange(41, 57)
     y = np.arange(71, 87)
     
@@ -174,15 +187,15 @@ def Test_tf_reshape():
                 "error_message": "output dtype is incorrect"
             },
             {
-                "name": "output_check_1",
-                "got": np.array_equal(result1.numpy(), solution(x, shape).numpy()),
-                "expected": True,
+                "name": "hidden_input_array_check_1",
+                "got": result1.numpy(),
+                "expected": solution(x, shape).numpy(),
                 "error_message": "output array is incorrect"
             },
             {
-                "name": "output_check_2",
-                "got": np.array_equal(result2.numpy(), solution(y, shape).numpy()),
-                "expected": True,
+                "name": "hidden_input_array_check_2",
+                "got": result2.numpy(),
+                "expected": solution(y, shape).numpy(),
                 "error_message": "output array is incorrect"
             },
         ]
@@ -191,7 +204,9 @@ def Test_tf_reshape():
 
         return failed_cases, len(test_cases)
 
-def Test_tf_cast():
+
+def test_tf_cast():
+
     x = np.arange(41, 50)
     y = np.arange(71, 80)
     
@@ -231,15 +246,15 @@ def Test_tf_cast():
                 "error_message": "output dtype is incorrect"
             },
             {
-                "name": "output_check_1",
-                "got": np.array_equal(result1.numpy(), solution(x, test_dtype).numpy()),
-                "expected": True,
+                "name": "hidden_input_array_check_1",
+                "got": result1.numpy(),
+                "expected": solution(x, test_dtype).numpy(),
                 "error_message": "output array is incorrect"
             },
             {
-                "name": "output_check_2",
-                "got": np.array_equal(result2.numpy(), solution(y, test_dtype).numpy()),
-                "expected": True,
+                "name": "hidden_input_array_check_2",
+                "got": result2.numpy(),
+                "expected": solution(y, test_dtype).numpy(),
                 "error_message": "output array is incorrect"
             },
         ]
@@ -248,7 +263,9 @@ def Test_tf_cast():
 
         return failed_cases, len(test_cases)
 
-def Test_tf_multiply():
+
+def test_tf_multiply():
+
     x1 = np.arange(41, 50)
     y1 = np.arange(71, 80)
     x2 = np.arange(31, 40)
@@ -288,15 +305,15 @@ def Test_tf_multiply():
                 "error_message": "output dtype is incorrect"
             },
             {
-                "name": "output_check_1",
-                "got": np.array_equal(result1.numpy(), solution(x1, y1)),
-                "expected": True,
+                "name": "hidden_input_array_check_1",
+                "got": result1.numpy(),
+                "expected": solution(x1, y1),
                 "error_message": "output array is incorrect"
             },
             {
-                "name": "output_check_2",
-                "got": np.array_equal(result2.numpy(), solution(x2, y2)),
-                "expected": True,
+                "name": "hidden_input_array_check_2",
+                "got": result2.numpy(),
+                "expected": solution(x2, y2),
                 "error_message": "output array is incorrect"
             },
         ]
@@ -305,7 +322,9 @@ def Test_tf_multiply():
 
         return failed_cases, len(test_cases)
 
-def Test_tf_add():
+
+def test_tf_add():
+
     x1 = tf.constant(np.arange(41, 50))
     y1 = tf.constant(np.arange(71, 80))
     x2 = tf.constant(np.arange(31, 40))
@@ -345,15 +364,15 @@ def Test_tf_add():
                 "error_message": "output dtype is incorrect"
             },
             {
-                "name": "output_check_1",
-                "got": np.array_equal(result1.numpy(), solution(x1, y1)),
-                "expected": True,
+                "name": "hidden_input_array_check_1",
+                "got": result1.numpy(),
+                "expected": solution(x1, y1),
                 "error_message": "output array is incorrect"
             },
             {
-                "name": "output_check_2",
-                "got": np.array_equal(result2.numpy(), solution(x2, y2)),
-                "expected": True,
+                "name": "hidden_input_array_check_2",
+                "got": result2.numpy(),
+                "expected": solution(x2, y2),
                 "error_message": "output array is incorrect"
             },
         ]
@@ -362,13 +381,26 @@ def Test_tf_add():
 
         return failed_cases, len(test_cases)
 
-def Test_tf_gradient_tape():
+
+def test_tf_gradient_tape():
+
     x = tf.constant(4.0)
     y = tf.constant(8.0)
     
     target = learner_mod.tf_gradient_tape
     
-    solution = solution_mod.tf_gradient_tape
+    def solution(x):
+        with tf.GradientTape() as t:
+
+            t.watch(x) 
+
+            y =  3 * (x ** 3) - 2 * (x ** 2)  + x    
+
+            z = tf.reduce_sum(y) 
+
+        dz_dx = t.gradient(z, x)
+
+        return dz_dx
     
     result1 = target(x)
     result2 = target(y)
@@ -401,15 +433,15 @@ def Test_tf_gradient_tape():
                 "error_message": "output dtype is incorrect"
             },
             {
-                "name": "output_check_1",
-                "got": np.array_equal(result1.numpy(), solution(x).numpy()),
-                "expected": True,
+                "name": "hidden_input_check_1",
+                "got": result1.numpy(),
+                "expected": solution(x).numpy(),
                 "error_message": "output array is incorrect"
             },
             {
-                "name": "output_check_2",
-                "got": np.array_equal(result2.numpy(), solution(y).numpy()),
-                "expected": True,
+                "name": "hidden_input_check_2",
+                "got": result2.numpy(),
+                "expected": solution(y).numpy(),
                 "error_message": "output array is incorrect"
             },
         ]
