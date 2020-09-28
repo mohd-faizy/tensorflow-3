@@ -13,3 +13,13 @@ Course 2 - Custom Training/.DS_Store
 Course 1 - Extending Keras/.DS_Store
 Course 2 - Custom Training/.DS_Store
 .DS_Store
+
+# ignore checkpoints for notebooks
+**/*.ipynb_checkpoints*
+**/*checkpoint.ipynb
+**/*checkpoint.py
+**/*.pyc
+**/*checkpoint.txt
+**/*checkpoint.png
+**/*checkpoint.PNG
+.ipynb_checkpoints
