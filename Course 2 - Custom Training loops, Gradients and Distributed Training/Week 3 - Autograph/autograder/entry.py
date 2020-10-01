@@ -1,17 +1,22 @@
 import sys
 from disable_warnings import *
 from tools import print_stderr, send_feedback
-from grader import (Test_F1ScoreResult, Test_apply_gradients, 
-                    Test_train_data_for_one_epoch)
+from grader import (Test_map_fn, Test_set_adam_optimizer, 
+                    Test_set_sparse_cat_crossentropy_loss, Test_set_sparse_cat_crossentropy_accuracy,
+                    Test_prepare_dataset, Test_train_one_step, Test_train)
 
 
 
 def run_grader(part_id):
     
     graded_funcs = {
-        "mylyu": Test_F1ScoreResult, 
-        "YQutN": Test_apply_gradients,
-        "8dNmL": Test_train_data_for_one_epoch
+        "1": Test_map_fn, 
+        "2": Test_set_adam_optimizer,
+        "3": Test_set_sparse_cat_crossentropy_loss,
+        "4": Test_set_sparse_cat_crossentropy_accuracy,
+        "5": Test_prepare_dataset,
+        "6": Test_train_one_step,
+        "7": Test_train
     }
 
     g_func = graded_funcs.get(part_id)
