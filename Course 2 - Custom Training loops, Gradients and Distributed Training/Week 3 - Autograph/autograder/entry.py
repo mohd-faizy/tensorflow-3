@@ -10,13 +10,13 @@ from grader import (Test_map_fn, Test_set_adam_optimizer,
 def run_grader(part_id):
     
     graded_funcs = {
-        "1": Test_map_fn, 
-        "2": Test_set_adam_optimizer,
-        "3": Test_set_sparse_cat_crossentropy_loss,
-        "4": Test_set_sparse_cat_crossentropy_accuracy,
-        "5": Test_prepare_dataset,
-        "6": Test_train_one_step,
-        "7": Test_train
+        "pxgPU": Test_map_fn, 
+        "fX2cS": Test_set_adam_optimizer,
+        "M6COK": Test_set_sparse_cat_crossentropy_loss,
+        "fbLog": Test_set_sparse_cat_crossentropy_accuracy,
+        "FaW22": Test_prepare_dataset,
+        "C8oAS": Test_train_one_step,
+        "NG4Bn": Test_train
     }
 
     g_func = graded_funcs.get(part_id)

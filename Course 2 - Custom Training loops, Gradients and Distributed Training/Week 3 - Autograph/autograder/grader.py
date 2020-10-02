@@ -274,11 +274,19 @@ def Test_train():
     
     txt = graded_cells.get("train").get("outputs")[0].get("text")
     number_of_lines = len(txt)
+    accuracy_list = list(map(lambda x: float(x.split("accuracy")[1].strip()), txt))
+    failed_tests = []
 
-    if number_of_lines >= 27:
-        return [{
-            'name': 'count number of lines in training output', 
-            'expected': 54, 
-            'got': number_of_lines}], 1
+    if number_of_lines < 27:
+        failed_tests.append({
+            'name': 'trained for one full epoch', 
+            'expected': "at least 27", 
+            'got': number_of_lines})
     
-    return [], 1
+    if accuracy_list[0] >= accuracy_list[20]:
+        failed_tests.append({
+            'name': 'accuracy increasing over time', 
+            'expected': True, 
+            'got': False})
+
+    return failed_tests, 2
