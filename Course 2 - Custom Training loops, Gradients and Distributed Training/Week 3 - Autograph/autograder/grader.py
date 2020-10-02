@@ -223,7 +223,7 @@ def Test_prepare_dataset():
 
 def Test_train_one_step():
 
-    MODULE_HANDLE = 'data/resnet_50_feature_vector'
+    MODULE_HANDLE = './data/resnet_50_feature_vector'
     num_classes = 2
     
     test_model = tf.keras.Sequential([

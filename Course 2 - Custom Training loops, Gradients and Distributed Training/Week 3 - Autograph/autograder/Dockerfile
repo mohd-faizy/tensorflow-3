@@ -6,7 +6,8 @@ RUN pip install -r requirements.txt
 
 RUN mkdir /grader && \ 
     mkdir /grader/solution && \
-    mkdir /grader/submission
+    mkdir /grader/submission && \
+    mkdir /grader/data
 
 COPY entry.py /grader/entry.py
 COPY grader.py /grader/grader.py
@@ -19,7 +20,7 @@ COPY solution/* /grader/solution/
 
 COPY sample_dataset_image.pkl /grader/
 COPY sample_image.pkl /grader/
-COPY data/* /grader/data/
+COPY data/ /grader/data/
 
 RUN chmod a+rwx -R /grader/
 
