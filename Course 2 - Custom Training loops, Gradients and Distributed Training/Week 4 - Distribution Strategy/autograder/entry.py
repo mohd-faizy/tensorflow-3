@@ -1,4 +1,5 @@
 import sys
+import traceback
 from disable_warnings import *
 from tools import print_stderr, send_feedback
 from grader import (Test_distribute_datasets, Test_train_test_step_fns,
@@ -17,8 +18,13 @@ def run_grader(part_id):
     if g_func is None:
         print_stderr("The partID provided did not correspond to any graded function.")
         return
-
-    failed_cases, num_cases = g_func()
+    try:
+        failed_cases, num_cases = g_func()
+    except:
+        traceback.print_exc()
+        send_feedback(0.0, "There was a problem grading your submission. Check stderr for more details.")
+        exit()
+    
     score = 1.0 - len(failed_cases) / num_cases
     if failed_cases:
         failed_msg = ""
