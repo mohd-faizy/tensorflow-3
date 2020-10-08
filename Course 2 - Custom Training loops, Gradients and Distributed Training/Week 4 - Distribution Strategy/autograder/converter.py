@@ -4,10 +4,10 @@ import jupytext
 from tools import send_feedback
 
 # For production
-# submission_dir = "/shared/submission/"
+submission_dir = "/shared/submission/"
 
 # For Local
-submission_dir = "sub2/"
+# submission_dir = "sub2/"
 
 for file in os.listdir(submission_dir):
     if file.endswith('.ipynb'):
@@ -22,10 +22,11 @@ if learner_notebook is None:
 sub_source = submission_dir + learner_notebook
 
 # For production
-# sub_destination = '/grader/submission/submission.ipynb'
+sub_destination = '/grader/submission/submission.ipynb'
 
 # For Local
-sub_destination = 'submission/submission.ipynb'
+# sub_destination = 'submission/submission.ipynb'
+
 shutil.copyfile(sub_source, sub_destination)
 
 nb = jupytext.read("submission/submission.ipynb")

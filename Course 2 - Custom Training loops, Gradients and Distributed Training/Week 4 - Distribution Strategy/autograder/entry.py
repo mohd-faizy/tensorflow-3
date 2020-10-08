@@ -9,9 +9,9 @@ from grader import (Test_distribute_datasets, Test_train_test_step_fns,
 def run_grader(part_id):
     
     graded_funcs = {
-        "1": Test_distribute_datasets, 
-        "2": Test_train_test_step_fns,
-        "3": Test_distributed_train_test_step_fns
+        "xV8vX": Test_distribute_datasets, 
+        "dmTKR": Test_train_test_step_fns,
+        "cst37": Test_distributed_train_test_step_fns
     }
 
     g_func = graded_funcs.get(part_id)
