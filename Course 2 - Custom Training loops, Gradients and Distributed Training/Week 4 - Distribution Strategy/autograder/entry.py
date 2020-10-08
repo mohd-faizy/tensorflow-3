@@ -1,22 +1,16 @@
 import sys
 from disable_warnings import *
 from tools import print_stderr, send_feedback
-from grader import (Test_map_fn, Test_set_adam_optimizer, 
-                    Test_set_sparse_cat_crossentropy_loss, Test_set_sparse_cat_crossentropy_accuracy,
-                    Test_prepare_dataset, Test_train_one_step, Test_train)
-
+from grader import (Test_distribute_datasets, Test_train_test_step_fns,
+                    Test_distributed_train_test_step_fns)
 
 
 def run_grader(part_id):
     
     graded_funcs = {
-        "pxgPU": Test_map_fn, 
-        "fX2cS": Test_set_adam_optimizer,
-        "M6COK": Test_set_sparse_cat_crossentropy_loss,
-        "fbLog": Test_set_sparse_cat_crossentropy_accuracy,
-        "FaW22": Test_prepare_dataset,
-        "C8oAS": Test_train_one_step,
-        "NG4Bn": Test_train
+        "1": Test_distribute_datasets, 
+        "2": Test_train_test_step_fns,
+        "3": Test_distributed_train_test_step_fns
     }
 
     g_func = graded_funcs.get(part_id)

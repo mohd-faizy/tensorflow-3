@@ -3,8 +3,8 @@
 #   jupytext:
 #     text_representation:
 #       extension: .py
-#       format_name: light
-#       format_version: '1.5'
+#       format_name: percent
+#       format_version: '1.3'
 #       jupytext_version: 1.5.0
 #   kernelspec:
 #     display_name: Python 3
@@ -12,10 +12,10 @@
 #     name: python3
 # ---
 
-# + [markdown] id="jYysdyb-CaWM"
+# %% [markdown] id="jYysdyb-CaWM"
 # # Custom training with tf.distribute.Strategy
 
-# + id="dzLKpmZICaWN"
+# %% id="dzLKpmZICaWN"
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import tensorflow as tf
@@ -26,19 +26,19 @@ import numpy as np
 import os
 from tqdm import tqdm
 
-# + [markdown] id="MM6W__qraV55"
+# %% [markdown] id="MM6W__qraV55"
 # ## Download the dataset
 
-# + id="cmPfSVg_lGlb"
+# %% id="cmPfSVg_lGlb"
 # Note, if you get a checksum error when downloading the data
 # you might need to install tfds-nightly, and then restart 
 # # !pip install tfds-nightly
 
-# + id="7NsM-Bma5wNw"
+# %% id="7NsM-Bma5wNw"
 import tensorflow_datasets as tfds
 tfds.disable_progress_bar()
 
-# + id="7MqDQO0KCaWS"
+# %% id="7MqDQO0KCaWS"
 splits = ['train[:80%]', 'train[80%:90%]', 'train[90%:]']
 
 (train_examples, validation_examples, test_examples), info = tfds.load('oxford_flowers102', with_info=True, as_supervised=True, split = splits, data_dir='data/')
@@ -46,10 +46,10 @@ splits = ['train[:80%]', 'train[80%:90%]', 'train[90%:]']
 num_examples = info.splits['train'].num_examples
 num_classes = info.features['label'].num_classes
 
-# + [markdown] id="4AXoHhrsbdF3"
+# %% [markdown] id="4AXoHhrsbdF3"
 # ## Create a strategy to distribute the variables and the graph
 
-# + [markdown] id="5mVuLZhbem8d"
+# %% [markdown] id="5mVuLZhbem8d"
 # How does `tf.distribute.MirroredStrategy` strategy work?
 #
 # *   All the variables and the model graph is replicated on the replicas.
@@ -61,21 +61,21 @@ num_classes = info.features['label'].num_classes
 # Note: You can put all the code below inside a single scope. We are dividing it into several code cells for illustration purposes.
 #
 
-# + id="F2VeZUWUj5S4"
+# %% id="F2VeZUWUj5S4"
 # If the list of devices is not specified in the
 # `tf.distribute.MirroredStrategy` constructor, it will be auto-detected.
 strategy = tf.distribute.MirroredStrategy()
 
-# + id="ZngeM_2o0_JO"
+# %% id="ZngeM_2o0_JO"
 print ('Number of devices: {}'.format(strategy.num_replicas_in_sync))
 
-# + [markdown] id="k53F5I_IiGyI"
+# %% [markdown] id="k53F5I_IiGyI"
 # ## Setup input pipeline
 
-# + [markdown] id="0Qb6nDgxiN_n"
+# %% [markdown] id="0Qb6nDgxiN_n"
 # Export the graph and the variables to the platform-agnostic SavedModel format. After your model is saved, you can load it with or without the scope.
 
-# + id="jwJtsCQhHK-E"
+# %% id="jwJtsCQhHK-E"
 BUFFER_SIZE = num_examples
 
 BATCH_SIZE_PER_REPLICA = 64
@@ -83,30 +83,29 @@ GLOBAL_BATCH_SIZE = BATCH_SIZE_PER_REPLICA * strategy.num_replicas_in_sync
 
 EPOCHS = 10
 
-# + id="rWUl3kUk8D5d"
+# %% id="rWUl3kUk8D5d"
 pixels = 224
 MODULE_HANDLE = 'data/resnet_50_feature_vector'
 IMAGE_SIZE = (pixels, pixels)
 print("Using {} with input size {}".format(MODULE_HANDLE, IMAGE_SIZE))
 
 
-# + id="RHGFit478BWD"
+# %% id="RHGFit478BWD"
 def format_image(image, label):
     image = tf.image.resize(image, IMAGE_SIZE) / 255.0
     return  image, label
 
 
-# + [markdown] id="J7fj3GskHC8g"
+# %% [markdown] id="J7fj3GskHC8g"
 # Create the datasets and distribute them:
 
-# + id="WYrMNNDhAvVl"
+# %% id="WYrMNNDhAvVl"
 train_batches = train_examples.shuffle(num_examples // 4).map(format_image).batch(BATCH_SIZE_PER_REPLICA).prefetch(1)
 validation_batches = validation_examples.map(format_image).batch(BATCH_SIZE_PER_REPLICA).prefetch(1)
 test_batches = test_examples.map(format_image).batch(1)
 
 
-# -
-
+# %%
 # GRADED FUNCTION
 def distribute_datasets(strategy, train_batches, validation_batches, test_batches):
     
@@ -120,17 +119,19 @@ def distribute_datasets(strategy, train_batches, validation_batches, test_batche
 
 
 
+# %%
 train_dist_dataset, val_dist_dataset, test_dist_dataset = distribute_datasets(strategy, train_batches, validation_batches, test_batches)
 
+# %%
 type(train_dist_dataset)
 
 
-# + [markdown] id="bAXAo_wWbWSb"
+# %% [markdown] id="bAXAo_wWbWSb"
 # ## Create the model
 #
 # We use the Model Subclassing API to do this.
 
-# + id="9ODch-OFCaW4"
+# %% id="9ODch-OFCaW4"
 class ResNetModel(tf.keras.Model):
     def __init__(self, classes):
         super(ResNetModel, self).__init__()
@@ -144,16 +145,16 @@ class ResNetModel(tf.keras.Model):
         return x
 
 
-# + id="9iagoTBfijUz"
+# %% id="9iagoTBfijUz"
 # Create a checkpoint directory to store the checkpoints.
 checkpoint_dir = './training_checkpoints'
 checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt")
 
-# + [markdown] id="e-wlFFZbP33n"
+# %% [markdown] id="e-wlFFZbP33n"
 # ## Define the loss function
 #
 
-# + id="R144Wci782ix"
+# %% id="R144Wci782ix"
 with strategy.scope():
     # Set reduction to `none` so we can do the reduction afterwards and divide by
     # global batch size.
@@ -165,26 +166,25 @@ with strategy.scope():
         return tf.nn.compute_average_loss(per_example_loss, global_batch_size=GLOBAL_BATCH_SIZE)
 
     test_loss = tf.keras.metrics.Mean(name='test_loss')
-# -
 
+# %%
 
-
-# + [markdown] id="w8y54-o9T2Ni"
+# %% [markdown] id="w8y54-o9T2Ni"
 # ## Define the metrics to track loss and accuracy
 #
 # These metrics track the test loss and training and test accuracy. You can use `.result()` to get the accumulated statistics at any time.
 
-# + id="zt3AHb46Tr3w"
+# %% id="zt3AHb46Tr3w"
 with strategy.scope():
     train_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(
         name='train_accuracy')
     test_accuracy = tf.keras.metrics.SparseCategoricalAccuracy(
         name='test_accuracy')
 
-# + [markdown] id="iuKuNXPORfqJ"
+# %% [markdown] id="iuKuNXPORfqJ"
 # ## Training loop
 
-# + id="OrMmakq5EqeQ"
+# %% id="OrMmakq5EqeQ"
 # model and optimizer must be created under `strategy.scope`.
 with strategy.scope():
     model = ResNetModel(classes=num_classes)
@@ -192,7 +192,7 @@ with strategy.scope():
     checkpoint = tf.train.Checkpoint(optimizer=optimizer, model=model)
 
 
-# + id="zUQ_nAP1MtA9"
+# %% id="zUQ_nAP1MtA9"
 # GRADED FUNCTION
 def train_test_step_fns(strategy, model, compute_loss, optimizer, train_accuracy, loss_object, test_loss, test_accuracy):
     with strategy.scope():
@@ -225,11 +225,11 @@ def train_test_step_fns(strategy, model, compute_loss, optimizer, train_accuracy
         return train_step, test_step
 
 
-# -
-
+# %%
 train_step, test_step = train_test_step_fns(strategy, model, compute_loss, optimizer, train_accuracy, loss_object, test_loss, test_accuracy)
 
 
+# %%
 def distributed_train_test_step_fns(strategy, train_step, test_step, model, compute_loss, optimizer, train_accuracy, loss_object, test_loss, test_accuracy):
     with strategy.scope():
         @tf.function
@@ -249,9 +249,10 @@ def distributed_train_test_step_fns(strategy, train_step, test_step, model, comp
         return distributed_train_step, distributed_test_step
 
 
+# %%
 distributed_train_step, distributed_test_step = distributed_train_test_step_fns(strategy, train_step, test_step, model, compute_loss, optimizer, train_accuracy, loss_object, test_loss, test_accuracy)
 
-# + id="gX975dMSNw0e"
+# %% id="gX975dMSNw0e"
 with strategy.scope():
     for epoch in range(EPOCHS):
         # TRAIN LOOP
@@ -276,7 +277,7 @@ with strategy.scope():
         train_accuracy.reset_states()
         test_accuracy.reset_states()
 
-# + [markdown] id="Z1YvXqOpwy08"
+# %% [markdown] id="Z1YvXqOpwy08"
 # Things to note in the example above:
 #
 # * We are iterating over the `train_dist_dataset` and `test_dist_dataset` using  a `for x in ...` construct.
@@ -285,7 +286,7 @@ with strategy.scope():
 # *`tf.distribute.Strategy.experimental_run_v2` returns results from each local replica in the strategy, and there are multiple ways to consume this result. You can do `tf.distribute.Strategy.reduce` to get an aggregated value. You can also do `tf.distribute.Strategy.experimental_local_results` to get the list of values contained in the result, one per local replica.
 #
 
-# + [markdown] id="WEaNCzYQvFqo"
+# %% [markdown] id="WEaNCzYQvFqo"
 # # Save the Model as a SavedModel
 #
 # You'll get a saved model of this finished trained model. You'll then 
@@ -295,11 +296,11 @@ with strategy.scope():
 # ## Step 1: Save the model as a SavedModel
 # This code will save your model as a SavedModel
 
-# + id="1zAlTlRxrqFu"
+# %% id="1zAlTlRxrqFu"
 model_save_path = "./tmp/mymodel/1/"
 tf.saved_model.save(model, model_save_path)
 
-# + [markdown] id="e0Zfmx6LvTJA"
+# %% [markdown] id="e0Zfmx6LvTJA"
 # ## Step 2: Zip the SavedModel Directory into /mymodel.zip
 #
 # This code will zip your saved model directory contents into a single file.
@@ -309,7 +310,7 @@ tf.saved_model.save(model, model_save_path)
 #
 # If the download fails because you aren't allowed to download multiple files from colab, check out the guidance here: https://ccm.net/faq/32938-google-chrome-allow-websites-to-perform-simultaneous-downloads
 
-# + id="gMuo2wQls41l"
+# %% id="gMuo2wQls41l"
 import os
 import zipfile
 
