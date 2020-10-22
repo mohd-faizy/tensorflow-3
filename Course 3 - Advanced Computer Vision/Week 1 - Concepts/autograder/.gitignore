@@ -1,2 +1,4 @@
 mymodel.zip
 data/
+*gz
+tmp/
