@@ -14,7 +14,6 @@ for file in os.listdir(submission_dir):
 
 if learner_file is None:
     send_feedback(0.0, "No .zip was found in the submission directory.")
-    exit()
 
 sub_source = submission_dir + learner_file
 sub_destination = '/grader/mymodel.zip'

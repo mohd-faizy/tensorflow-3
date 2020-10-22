@@ -12,12 +12,12 @@ if __name__ == "__main__":
     except IndexError:
         print_stderr("Missing partId. Required to continue.")
         send_feedback(0.0, "Missing partId.")
-        exit()
+
     else:
         if part_id != "wNSsr":
             print_stderr("Invalid partId. Required to continue.")
             send_feedback(0.0, "Invalid partId.")
-            exit()
+
 
 
 
