@@ -10,6 +10,7 @@ RUN mkdir /grader && \
 COPY data/ /grader/data/
 COPY disable_warnings.py /grader/disable_warnings.py
 COPY tools.py /grader/tools.py
+COPY utils.py /grader/utils.py
 COPY converter.py /grader/converter.py
 COPY grader.py /grader/grader.py
 
