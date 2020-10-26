@@ -1,10 +1,15 @@
 from disable_warnings import *
 import sys
-import tensorflow as tf
-import tensorflow_datasets as tfds
 from tools import send_feedback
-import converter
 
+
+def grader():
+    PASSING_GRADE = 50
+    if grade > PASSING_GRADE:
+        send_feedback(1.0, f"Congratulations!\nYour model achieved an iou score greater than 0.7 for {grade}% of the images.")
+    else:
+        send_feedback(0.0, f"Your model achieved an iou score greater than 0.7 for {grade}% of the images.\nAt least {PASSING_GRADE}% is required to pass.")
+        
 
 if __name__ == "__main__":
     try:
@@ -14,25 +19,6 @@ if __name__ == "__main__":
     else:
         if part_id != "wNSsr":
             send_feedback(0.0, "Invalid partId.", err=True)
-
-try:
-    learner_model = tf.saved_model.load("./tmp/mymodel/1")
-except:
-    send_feedback(0.0, "Your model could not be loaded. Make sure the zip file has the correct contents.", err=True)
-
-
-
-
-# for images, labels in test_batches:
-#     try:
-#         predictions = infer(images)["output_1"]
-#     except:
-#         send_feedback(0.0, "There was an issue with your model that prevented inference.")
-#     eval_accuracy(labels, predictions)
-
-# score = (eval_accuracy.result() * 100).numpy()
-
-# if score > 60:
-#     send_feedback(1.0, "Congratulations! Your model achieved the desired level of accuracy.")
-# else:
-#     send_feedback(0.0, "Your model has an accuracy lower than 0.6.")
+        import converter
+        from utils import grade
+        grader()

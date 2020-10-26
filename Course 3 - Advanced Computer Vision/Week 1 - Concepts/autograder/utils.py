@@ -4,9 +4,12 @@ import numpy as np
 import tensorflow as tf
 from matplotlib import pyplot as plt
 import tensorflow_datasets as tfds
+from tools import send_feedback
 
 BATCH_SIZE = 64
-model = tf.keras.models.load_model("birds.h5")
+try: model = tf.keras.models.load_model("birds.h5")
+except:
+    send_feedback(0.0, "Your model could not be loaded. Make sure it is a valid h5 file.", err=True)
 
 
 """
@@ -169,9 +172,3 @@ beating_threshold = (iou >= iou_threshold).sum()
 under_threshold = (iou < iou_threshold).sum()
 
 grade = beating_threshold * 100 / (beating_threshold + under_threshold)
-print(grade)
-PASSING_GRADE = 50
-if grade > PASSING_GRADE:
-    print("You Passed")
-else:
-    print("You Failed")
