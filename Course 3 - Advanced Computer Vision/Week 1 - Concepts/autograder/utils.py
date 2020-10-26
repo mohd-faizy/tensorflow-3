@@ -1,11 +1,9 @@
 from disable_warnings import *
-import os, re, time, json
 import PIL.Image, PIL.ImageFont, PIL.ImageDraw
 import numpy as np
 import tensorflow as tf
 from matplotlib import pyplot as plt
 import tensorflow_datasets as tfds
-import cv2
 
 BATCH_SIZE = 64
 model = tf.keras.models.load_model("birds.h5")
@@ -111,16 +109,6 @@ def dataset_to_numpy_with_original_bboxes_util(dataset, batch_size=0, N=0):
 
 
 """
-Loads and maps the training split of the dataset. It used map function to reverse the normalization done on the bounding boxes in the dataset.
-This will generate the dataset prepared for visualization
-"""
-def get_visualization_training_dataset():
-    dataset, info = tfds.load("caltech_birds2010", split="train", with_info=True, data_dir="./data", download=False)
-    visualization_training_dataset = dataset.map(read_image_tfds_with_original_bbox, num_parallel_calls=16)
-    return visualization_training_dataset
-
-
-"""
 Loads and maps the validation split of the dataset. It used map function to reverse the normalization done on the bounding boxes in the dataset.
 This will generate the dataset prepared for visualization
 """
@@ -128,18 +116,6 @@ def get_visualization_validation_dataset():
     dataset = tfds.load("caltech_birds2010", split="test", try_gcs=True, data_dir="./data", download=False)
     visualization_validation_dataset = dataset.map(read_image_tfds_with_original_bbox, num_parallel_calls=16)
     return visualization_validation_dataset
-
-
-"""
-Loads and maps the training split of the dataset using the map function for resizing, image normalization and bounding box translation.
-"""
-def get_training_dataset(dataset):
-    dataset = dataset.map(read_image_tfds, num_parallel_calls=16)
-    dataset = dataset.shuffle(512, reshuffle_each_iteration=True)
-    dataset = dataset.repeat()
-    dataset = dataset.batch(BATCH_SIZE)
-    dataset = dataset.prefetch(-1)
-    return dataset
 
 
 """
@@ -182,11 +158,7 @@ def intersection_over_union(pred_box, true_box):
 
 
 # instantiate the datasets
-visualization_training_dataset = get_visualization_training_dataset()
 visualization_validation_dataset = get_visualization_validation_dataset()
-
-training_dataset = get_training_dataset(visualization_training_dataset)
-validation_dataset = get_validation_dataset(visualization_validation_dataset)
 
 original_images, normalized_images, normalized_bboxes = dataset_to_numpy_with_original_bboxes_util(visualization_validation_dataset, N=500)
 predicted_bboxes = model.predict(normalized_images, batch_size=32)
@@ -195,8 +167,6 @@ iou_threshold = 0.7
 
 beating_threshold = (iou >= iou_threshold).sum()
 under_threshold = (iou < iou_threshold).sum()
-print("Number of predictions where iou > threshold(%s): %s" % (iou_threshold, (iou >= iou_threshold).sum()))
-print("Number of predictions where iou < threshold(%s): %s" % (iou_threshold, (iou < iou_threshold).sum()))
 
 grade = beating_threshold * 100 / (beating_threshold + under_threshold)
 print(grade)
