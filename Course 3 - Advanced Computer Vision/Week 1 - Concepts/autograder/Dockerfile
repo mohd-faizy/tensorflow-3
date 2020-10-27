@@ -14,7 +14,7 @@ COPY utils.py /grader/utils.py
 COPY converter.py /grader/converter.py
 COPY grader.py /grader/grader.py
 
-RUN chmod a+rwx -R /grader/
+RUN chmod a+rwx /grader/
 
 WORKDIR /grader/
 

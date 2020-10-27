@@ -17,7 +17,7 @@ if __name__ == "__main__":
     except IndexError:
         send_feedback(0.0, "Missing partId.", err=True)
     else:
-        if part_id != "wNSsr":
+        if part_id != "ar2aA":
             send_feedback(0.0, "Invalid partId.", err=True)
         import converter
         from utils import grade
